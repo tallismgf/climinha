@@ -1,11 +1,19 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { TouchableOpacity, View } from 'react-native'
+import { useQuery } from 'react-query'
 import { Header, Temperature } from '../../components'
 import { Climates } from '../../components/climates'
+import { getWeather } from '../../api'
 import { Text } from '../../styled'
 import { Container } from './styled'
 
+const dataGyn = {
+  lat: '-16.6954999',
+  lon: '-49.4443513'
+}
+
 export const Home: FC = () => {
+  const { data, isLoading } = useQuery('getWeather', () => getWeather(dataGyn), { retry: 3 })
 
   return (
       <Container>
@@ -13,9 +21,9 @@ export const Home: FC = () => {
           city='Goiânia'
         />
 
-        <Temperature />
+        <Temperature data={data?.current}/>
 
-        <Climates />
+        <Climates data={data?.daily} />
 
         <TouchableOpacity
           style={{

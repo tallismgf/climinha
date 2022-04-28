@@ -1,8 +1,14 @@
 import { View } from 'react-native'
 import { Text } from '../../styled'
+import { WeatherCurrentProps } from '../../ts'
 import { ContainerTemperature } from './styled'
 
-export const Temperature = () => {
+type TemperatureProps = {
+  data: WeatherCurrentProps | undefined
+}
+
+export const Temperature = ({ data }: TemperatureProps) => {
+  const weather = data?.weather[0]
 
   return (
     <ContainerTemperature>
@@ -12,7 +18,7 @@ export const Temperature = () => {
             fontSize: 96
           }}
         >
-          30
+          {data?.temp.toFixed(1).toString()}
         </Text>
         <Text fontSize='36' style={{ marginTop: 24 }} >
           °C
@@ -24,7 +30,7 @@ export const Temperature = () => {
           fontSize: 22
         }}
       >
-        Limpo
+        {weather?.description}
       </Text>
     </ContainerTemperature>
   )

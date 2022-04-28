@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import { SafeAreaView, FlatList, View, ListRenderItem } from 'react-native'
 import { Text } from '../../styled'
+import { WeatherDailyProps } from '../../ts'
 
 const mockData = [
   {
@@ -29,7 +31,17 @@ type climateFlatListProps = {
   min: string
 }
 
-export const Climates = () => {
+type ClimatesProps = {
+  data: WeatherDailyProps[] | undefined
+}
+
+export const Climates = ({ data }: ClimatesProps) => {
+
+  useEffect(() => {
+    if(data) {
+      
+    }
+  })
 
   const renderItem: ListRenderItem<climateFlatListProps> = ({ item }) => {
     const { label, max, min } = item
