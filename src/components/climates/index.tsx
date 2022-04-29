@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { SafeAreaView, FlatList, View, ListRenderItem } from 'react-native'
 import { Text } from '../../styled'
-import { WeatherDailyProps } from '../../ts'
+import { WeatherDailyProps, WeatherProps } from '../../ts'
+import { Icon } from '../index'
 
 const weekDay = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
 
 type ClimateProps = {
   id: string
   day: string
-  weatherDescription: string
+  weather: WeatherProps
   max: number
   min: number
 }
@@ -23,10 +24,9 @@ export const Climates = ({ data }: ClimatesProps) => {
   useEffect(() => {
     if(data) {
       const temp = adapterData(data)
-      //console.log(temp)
       setDataWeather(temp)
     }
-  }, [])
+  }, [data])
 
   const adapterData = (data: WeatherDailyProps[]): ClimateProps[] => {
     const temp = data.map(({dt, temp, weather}, index) => {
@@ -40,7 +40,7 @@ export const Climates = ({ data }: ClimatesProps) => {
         id: dt.toString(),
         max: temp.max,
         min: temp.min,
-        weatherDescription: weather[0].description,
+        weather: weather[0],
         day: dayString,
       }
 
@@ -51,7 +51,7 @@ export const Climates = ({ data }: ClimatesProps) => {
   }
 
   const renderItem: ListRenderItem<ClimateProps> = ({ item }) => {
-    const { day, weatherDescription, max, min } = item
+    const { day, weather: { description, icon }, max, min } = item
 
     return (
       <View
@@ -65,18 +65,14 @@ export const Climates = ({ data }: ClimatesProps) => {
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }} >
 
-          <View 
-            style={{
-              height: 18,
-              width: 18,
-              borderRadius: 16,
-              backgroundColor: 'yellow',
-              marginRight: 6
-            }}  
+          <Icon
+            iconName={icon}
+            width={34}
+            height={34}
           />
 
           <Text fontSize='18' >
-            {`${day} - ${weatherDescription}`}
+            {`${day} - ${description}`}
           </Text>
         </View>
 
