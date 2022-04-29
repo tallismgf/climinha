@@ -22,6 +22,7 @@ export type WeatherDailyTempProps = {
 export type WeatherDailyProps = {
   temp: WeatherDailyTempProps
   weather: WeatherProps[]
+  dt: number
 }
 
 
