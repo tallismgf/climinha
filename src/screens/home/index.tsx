@@ -3,27 +3,44 @@ import { TouchableOpacity, View } from 'react-native'
 import { useQuery } from 'react-query'
 import { Header, Temperature } from '../../components'
 import { Climates } from '../../components/climates'
-import { getWeather } from '../../api'
+import { getWeather, getLocationByCoord } from '../../api'
 import { Text } from '../../styled'
 import { Container } from './styled'
+import { LocationProps } from '../../ts'
 
 const dataGyn = {
   lat: '-16.6954999',
   lon: '-49.4443513'
 }
 
-export const Home: FC = () => {
-  const { data, isLoading } = useQuery('getWeather', () => getWeather(dataGyn), { retry: 3 })
+
+export const Home: FC<LocationProps> = (data: LocationProps) => {
+  const { 
+    data: dataWeather, 
+    isLoading: isLoadingWeather, 
+    refetch: refetchWeather 
+  } = useQuery('getWeather', () => getWeather(data), { retry: 3 })
+  const { data: 
+    dataLocation, 
+    isLoading: isLoadingLocation, 
+    refetch: refetchLocation 
+  } = useQuery('getLocationData', () => getLocationByCoord(data), { retry: 3 })
+
+  useEffect(() => {
+    // Validar depois o refetch
+    //refetchWeather() 
+    //refetchLocation()
+  }, [data])
 
   return (
       <Container>
         <Header 
-          city='Goiânia'
+          city={dataLocation?.administrative_area || ''}
         />
 
-        <Temperature data={data?.current}/>
+        <Temperature data={dataWeather?.current}/>
 
-        <Climates data={data?.daily} />
+        <Climates data={dataWeather?.daily} />
 
         <TouchableOpacity
           style={{
